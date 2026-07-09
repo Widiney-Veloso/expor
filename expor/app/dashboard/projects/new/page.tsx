@@ -4,7 +4,7 @@ import DashboardNav from "@/components/DashboardNav";
 import ProjectForm from "@/components/ProjectForm";
 
 export default async function NewProjectPage() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

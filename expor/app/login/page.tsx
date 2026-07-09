@@ -28,7 +28,7 @@ export default function LoginPage() {
     setLoading(false);
 
     if (signInError) {
-      setError("E-mail ou senha incorretos.");
+      setError(traduzErroLogin(signInError.message));
       return;
     }
 
@@ -101,4 +101,14 @@ export default function LoginPage() {
       </div>
     </main>
   );
+}
+
+function traduzErroLogin(msg: string) {
+  if (msg.toLowerCase().includes("email not confirmed")) {
+    return "Você ainda não confirmou seu e-mail. Verifique sua caixa de entrada (e o spam) e clique no link de confirmação antes de entrar.";
+  }
+  if (msg.toLowerCase().includes("invalid login credentials")) {
+    return "E-mail ou senha incorretos.";
+  }
+  return "Não foi possível entrar. Tente novamente em instantes.";
 }

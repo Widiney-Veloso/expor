@@ -4,7 +4,7 @@ import DashboardNav from "@/components/DashboardNav";
 import ProfileForm from "@/components/ProfileForm";
 
 export default async function SettingsPage() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

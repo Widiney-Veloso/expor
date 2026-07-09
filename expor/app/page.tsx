@@ -43,7 +43,7 @@ const REASONS = [
 ];
 
 export default async function LandingPage() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: profiles } = await supabase
     .from("profiles")
     .select("*")

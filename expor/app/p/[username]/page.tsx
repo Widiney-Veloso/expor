@@ -8,14 +8,15 @@ import type { Project } from "@/lib/types";
 export default async function PublicPortfolioPage({
   params,
 }: {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }) {
-  const supabase = createClient();
+  const { username } = await params;
+  const supabase = await createClient();
 
   const { data: profile } = await supabase
     .from("profiles")
     .select("*")
-    .eq("username", params.username)
+    .eq("username", username)
     .single();
 
   if (!profile || !profile.is_public) notFound();

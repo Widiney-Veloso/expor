@@ -7,7 +7,7 @@ import PortfolioCard from "@/components/PortfolioCard";
 import type { Profile, Project } from "@/lib/types";
 
 export default async function DashboardPage() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const {
     data: { user },

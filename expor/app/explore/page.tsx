@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { Profile } from "@/lib/types";
 
 export default async function ExplorePage() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data: profiles } = await supabase
     .from("profiles")

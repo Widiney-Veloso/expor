@@ -5,7 +5,7 @@ Análise e Desenvolvimento de Sistemas (IFPI — Campus Picos).
 
 ## Stack utilizada
 
-- **Next.js 14** (App Router) — frontend e backend em um único projeto
+- **Next.js 16** (App Router) — frontend e backend em um único projeto
 - **Supabase** — banco de dados PostgreSQL, autenticação e armazenamento de imagens
 - **Tailwind CSS** — estilização, seguindo a identidade visual da EXPOR (tema escuro + roxo)
 - **TypeScript**
@@ -24,7 +24,7 @@ Análise e Desenvolvimento de Sistemas (IFPI — Campus Picos).
 
 ### 1. Pré-requisitos
 
-- [Node.js](https://nodejs.org/) 18 ou superior instalado
+- [Node.js](https://nodejs.org/) 20 ou superior instalado (necessário para o Next.js 16)
 - Uma conta gratuita no [Supabase](https://supabase.com/)
 
 ### 2. Criar o projeto no Supabase

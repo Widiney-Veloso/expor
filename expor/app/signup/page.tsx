@@ -16,6 +16,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [confirmEmailSent, setConfirmEmailSent] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -30,7 +31,7 @@ export default function SignupPage() {
     }
 
     setLoading(true);
-    const { error: signUpError } = await supabase.auth.signUp({
+    const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -47,6 +48,13 @@ export default function SignupPage() {
       return;
     }
 
+    // Se a confirmação de e-mail estiver ativada no Supabase, não existe
+    // sessão logo após o cadastro — o usuário precisa confirmar o e-mail antes.
+    if (!data.session) {
+      setConfirmEmailSent(true);
+      return;
+    }
+
     router.push("/dashboard");
     router.refresh();
   }
@@ -58,90 +66,108 @@ export default function SignupPage() {
           <Logo />
         </div>
         <div className="card p-8">
-          <h1 className="font-display text-xl font-bold text-ink">
-            Crie seu portfólio na EXPOR
-          </h1>
-          <p className="mt-1 text-sm text-ink-muted">
-            Leva menos de um minuto.
-          </p>
-
-          <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-            <div>
-              <label className="label" htmlFor="fullName">
-                Nome completo
-              </label>
-              <input
-                id="fullName"
-                className="input"
-                required
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="Seu nome"
-              />
-            </div>
-            <div>
-              <label className="label" htmlFor="username">
-                Nome de usuário (URL do seu portfólio)
-              </label>
-              <div className="flex items-center overflow-hidden rounded-xl border border-base-border bg-base-card2">
-                <span className="pl-4 text-sm text-ink-faint">expor.com/p/</span>
-                <input
-                  id="username"
-                  className="w-full bg-transparent px-2 py-3 text-sm text-ink placeholder:text-ink-faint focus:outline-none"
-                  required
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="seunome"
-                />
-              </div>
-            </div>
-            <div>
-              <label className="label" htmlFor="email">
-                E-mail
-              </label>
-              <input
-                id="email"
-                type="email"
-                className="input"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="voce@email.com"
-              />
-            </div>
-            <div>
-              <label className="label" htmlFor="password">
-                Senha
-              </label>
-              <input
-                id="password"
-                type="password"
-                className="input"
-                required
-                minLength={6}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Mínimo de 6 caracteres"
-              />
-            </div>
-
-            {error && (
-              <p className="rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-400">
-                {error}
+          {confirmEmailSent ? (
+            <div className="text-center">
+              <h1 className="font-display text-xl font-bold text-ink">
+                Confirme seu e-mail
+              </h1>
+              <p className="mt-3 text-sm text-ink-muted">
+                Enviamos um link de confirmação para <strong className="text-ink">{email}</strong>.
+                Abra sua caixa de entrada (verifique também o spam) e clique no
+                link para ativar sua conta.
               </p>
-            )}
+              <Link href="/login" className="btn-primary mt-6 inline-flex">
+                Ir para o login
+              </Link>
+            </div>
+          ) : (
+            <>
+              <h1 className="font-display text-xl font-bold text-ink">
+                Crie seu portfólio na EXPOR
+              </h1>
+              <p className="mt-1 text-sm text-ink-muted">
+                Leva menos de um minuto.
+              </p>
 
-            <button type="submit" disabled={loading} className="btn-primary w-full">
-              {loading ? "Criando conta..." : "Criar meu portfólio"}
-            </button>
-          </form>
+              <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                <div>
+                  <label className="label" htmlFor="fullName">
+                    Nome completo
+                  </label>
+                  <input
+                    id="fullName"
+                    className="input"
+                    required
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    placeholder="Seu nome"
+                  />
+                </div>
+                <div>
+                  <label className="label" htmlFor="username">
+                    Nome de usuário (URL do seu portfólio)
+                  </label>
+                  <div className="flex items-center overflow-hidden rounded-xl border border-base-border bg-base-card2">
+                    <span className="pl-4 text-sm text-ink-faint">expor.com/p/</span>
+                    <input
+                      id="username"
+                      className="w-full bg-transparent px-2 py-3 text-sm text-ink placeholder:text-ink-faint focus:outline-none"
+                      required
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder="seunome"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="label" htmlFor="email">
+                    E-mail
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    className="input"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="voce@email.com"
+                  />
+                </div>
+                <div>
+                  <label className="label" htmlFor="password">
+                    Senha
+                  </label>
+                  <input
+                    id="password"
+                    type="password"
+                    className="input"
+                    required
+                    minLength={6}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Mínimo de 6 caracteres"
+                  />
+                </div>
 
-          <p className="mt-6 text-center text-sm text-ink-muted">
-            Já tem uma conta?{" "}
-            <Link href="/login" className="font-semibold text-brand-light">
-              Entrar
-            </Link>
-          </p>
+                {error && (
+                  <p className="rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-400">
+                    {error}
+                  </p>
+                )}
+
+                <button type="submit" disabled={loading} className="btn-primary w-full">
+                  {loading ? "Criando conta..." : "Criar meu portfólio"}
+                </button>
+              </form>
+
+              <p className="mt-6 text-center text-sm text-ink-muted">
+                Já tem uma conta?{" "}
+                <Link href="/login" className="font-semibold text-brand-light">
+                  Entrar
+                </Link>
+              </p>
+            </>
+          )}
         </div>
       </div>
     </main>
