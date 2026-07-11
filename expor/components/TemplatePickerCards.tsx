@@ -48,7 +48,8 @@ export default function TemplatePickerCards({ profile }: { profile: Profile }) {
     setLoading(null);
 
     if (error) {
-      alert("Não foi possível selecionar o modelo. Tente novamente.");
+      console.error(error);
+      alert(`Não foi possível selecionar o modelo: ${error.message}`);
       return;
     }
 

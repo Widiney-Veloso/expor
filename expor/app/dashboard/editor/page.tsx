@@ -6,6 +6,7 @@ import PhotographerEditorForm from "@/components/editor/PhotographerEditorForm";
 import DeveloperEditorForm from "@/components/editor/DeveloperEditorForm";
 import NutritionistEditorForm from "@/components/editor/NutritionistEditorForm";
 import { getDefaultContent, DEFAULT_THEME_BY_TEMPLATE, TEMPLATE_LABELS } from "@/lib/templates/defaults";
+import type { TemplateId } from "@/lib/types";
 
 export default async function EditorPage() {
   const supabase = await createClient();
@@ -24,9 +25,10 @@ export default async function EditorPage() {
   if (!profile) redirect("/login");
   if (!profile.template) redirect("/dashboard/template");
 
-  const defaults = getDefaultContent(profile.template);
+  const template = profile.template as TemplateId;
+  const defaults = getDefaultContent(template);
   const initialContent = { ...defaults, ...(profile.content ?? {}) };
-  const initialTheme = { ...DEFAULT_THEME_BY_TEMPLATE[profile.template], ...(profile.theme ?? {}) };
+  const initialTheme = { ...DEFAULT_THEME_BY_TEMPLATE[template], ...(profile.theme ?? {}) };
 
   return (
     <>
@@ -35,7 +37,7 @@ export default async function EditorPage() {
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="font-display text-2xl font-bold text-ink">
-              Editando: modelo {TEMPLATE_LABELS[profile.template]}
+              Editando: modelo {TEMPLATE_LABELS[template]}
             </h1>
             <p className="text-sm text-ink-muted">
               Preencha seus dados, fotos e cores. Depois de salvar, seu site fica em{" "}
@@ -50,13 +52,13 @@ export default async function EditorPage() {
           </Link>
         </div>
 
-        {profile.template === "photographer" && (
+        {template === "photographer" && (
           <PhotographerEditorForm userId={user.id} initialContent={initialContent as any} initialTheme={initialTheme} />
         )}
-        {profile.template === "developer" && (
+        {template === "developer" && (
           <DeveloperEditorForm userId={user.id} initialContent={initialContent as any} initialTheme={initialTheme} />
         )}
-        {profile.template === "nutritionist" && (
+        {template === "nutritionist" && (
           <NutritionistEditorForm userId={user.id} initialContent={initialContent as any} initialTheme={initialTheme} />
         )}
       </main>

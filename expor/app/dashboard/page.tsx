@@ -61,7 +61,7 @@ export default async function DashboardPage() {
             <div className="card flex flex-wrap items-center justify-between gap-4 p-6">
               <div>
                 <p className="font-display font-bold text-ink">
-                  Modelo escolhido: {TEMPLATE_LABELS[profile.template]}
+                  Modelo escolhido: {TEMPLATE_LABELS[profile.template as TemplateId]}
                 </p>
                 <p className="text-sm text-ink-muted">
                   Seu site está em{" "}
