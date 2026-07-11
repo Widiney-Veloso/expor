@@ -12,6 +12,12 @@ export default function DashboardNav({ username }: { username: string }) {
             <Link href="/dashboard" className="hover:text-ink">
               Meu painel
             </Link>
+            <Link href="/dashboard/template" className="hover:text-ink">
+              Modelo do site
+            </Link>
+            <Link href="/dashboard/editor" className="hover:text-ink">
+              Editar meu site
+            </Link>
             <Link href="/explore" className="hover:text-ink">
               Explorar
             </Link>
@@ -24,7 +30,7 @@ export default function DashboardNav({ username }: { username: string }) {
           </div>
         </div>
         <div className="flex items-center gap-5">
-          <Link href="/dashboard/projects/new" className="btn-primary">
+          <Link href="/dashboard/template" className="btn-primary">
             Criar Portfólio
           </Link>
           <LogoutButton />

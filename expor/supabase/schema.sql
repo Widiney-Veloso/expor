@@ -23,6 +23,14 @@ create table if not exists public.profiles (
   instagram text,
   linkedin text,
   is_public boolean not null default true,
+  template text check (template in ('photographer', 'developer', 'nutritionist')),
+  theme jsonb not null default '{
+    "primary": "#7C3AED",
+    "secondary": "#3B82F6",
+    "background": "#ffffff",
+    "dark": "#111827"
+  }'::jsonb,
+  content jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );

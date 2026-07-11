@@ -14,11 +14,21 @@ Análise e Desenvolvimento de Sistemas (IFPI — Campus Picos).
 
 - Cadastro e login de usuários (e-mail/senha)
 - Criação e edição de perfil profissional (foto, capa, bio, área, redes sociais)
-- Criação, edição e exclusão de projetos do portfólio, com upload de imagens
-- Página pública do portfólio (`/p/[username]`), acessível sem login
+- **Modelos de portfólio prontos** (Fotógrafo, Desenvolvedor de Sistemas, Nutricionista): o usuário escolhe um modelo, preenche seus textos e fotos, e personaliza as cores livremente
+- Página pública do portfólio (`/p/[username]`), acessível sem login — exibe o modelo escolhido já publicado
 - Página de exploração/descoberta de portfólios públicos
-- Dashboard do criador com seus projetos, favoritos e descoberta de outros portfólios
-- Controle de visibilidade (portfólio público/privado, projeto publicado/rascunho)
+- Dashboard do criador com status do site, favoritos e descoberta de outros portfólios
+- Controle de visibilidade (portfólio público/privado)
+
+### Como funciona o sistema de modelos
+
+1. Depois de criar a conta, o usuário é levado para `/dashboard/template` e escolhe um dos 3 modelos
+2. Ao escolher, o sistema salva um conteúdo padrão de exemplo (`lib/templates/defaults.ts`) no campo `content` (JSON) do perfil
+3. O usuário é levado ao editor (`/dashboard/editor`), que mostra um formulário específico para aquele modelo — textos, upload de imagens e 4 seletores de cor livres (destaque, secundária, fundo, rodapé)
+4. Ao salvar, os dados vão para as colunas `template`, `theme` e `content` da tabela `profiles`
+5. A página pública `/p/[username]` lê esses dados e renderiza o modelo correspondente (`components/templates/`) com as informações do usuário
+
+Para adicionar um **novo modelo** no futuro: criar o tipo de conteúdo em `lib/types.ts`, o conteúdo padrão em `lib/templates/defaults.ts`, o componente visual em `components/templates/`, e o formulário de edição em `components/editor/`.
 
 ## Passo a passo para rodar o projeto
 
@@ -34,7 +44,8 @@ Análise e Desenvolvimento de Sistemas (IFPI — Campus Picos).
 3. No menu lateral, vá em **SQL Editor** → **New query**.
 4. Copie todo o conteúdo do arquivo `supabase/schema.sql` deste projeto, cole no editor e clique em **Run**.
    - Isso cria as tabelas (`profiles`, `projects`, `project_images`, `favorites`), as regras de segurança (RLS) e o bucket de imagens `portfolio-images`.
-5. Vá em **Project Settings → API** e copie:
+5. **Se você já tinha um projeto Supabase criado antes do sistema de templates**, rode também o arquivo `supabase/migration_templates.sql` no SQL Editor — ele adiciona as colunas `template`, `theme` e `content` na tabela `profiles` sem apagar nada.
+6. Vá em **Project Settings → API** e copie:
    - **Project URL**
    - **anon public key**
 
